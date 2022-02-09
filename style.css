@@ -1,0 +1,22 @@
+*{
+  padding: 0;
+  margin: 0;
+  background-color: rgb(34, 34, 34);
+}
+
+#canvas{
+  width: calc(min(100vw, 100vh) / 2);
+  height: calc(min(100vw, 100vh) / 2);
+}
+
+.img {
+  width: calc(min(100vw, 100vh) / 2);
+  height: calc(min(100vw, 100vh) / 2);
+}
+
+.container{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
