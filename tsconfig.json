@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
-    "target": "esnext",
+    "target": "es6",
     "watch": true,
     "outDir": "dist",
-    "rootDir": "src"
+    "rootDir": "src",
+    "strict": true
   }
 }

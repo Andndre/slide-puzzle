@@ -1,3 +1,13 @@
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 let canvas;
 let ctx;
 let scaledSize;
@@ -98,34 +108,38 @@ function drawPartAt(i, j, x, y) {
     ctx.fillStyle = "#000000";
     ctx.fillText((val + 1).toString(), x + cellWidth / 2 - cellWidth / 16, y + cellWidth / 2 + cellWidth / 16);
 }
-async function randomMove(recursive) {
-    if (recursive <= 0) {
-        render();
-        return;
-    }
-    let empty = getEmpty();
-    let dir;
-    let add;
-    do {
-        dir = randomInt(0, dirs.length - 1);
-        add = [empty[0] + dirs[dir][0], empty[1] + dirs[dir][1]];
-    } while (dir == lastLastDir ||
-        add[0] < 0 ||
-        add[0] >= puzzleSize ||
-        add[1] < 0 ||
-        add[1] >= puzzleSize);
-    lastLastDir = lastDir;
-    lastDir = dir;
-    await swapAnimate(add[0], add[1], empty[0], empty[1]);
-    randomMove(--recursive);
+function randomMove(recursive) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (recursive <= 0) {
+            render();
+            return;
+        }
+        let empty = getEmpty();
+        let dir;
+        let add;
+        do {
+            dir = randomInt(0, dirs.length - 1);
+            add = [empty[0] + dirs[dir][0], empty[1] + dirs[dir][1]];
+        } while (dir == lastLastDir ||
+            add[0] < 0 ||
+            add[0] >= puzzleSize ||
+            add[1] < 0 ||
+            add[1] >= puzzleSize);
+        lastLastDir = lastDir;
+        lastDir = dir;
+        yield swapAnimate(add[0], add[1], empty[0], empty[1]);
+        randomMove(--recursive);
+    });
 }
-async function backTrack() {
-    if (track.length == 0)
-        return;
-    let [x, y] = track.pop();
-    let [emptyJ, emptyI] = getEmpty();
-    await swapAnimate(x, y, emptyJ, emptyI, true);
-    backTrack();
+function backTrack() {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (track.length == 0)
+            return;
+        let [x, y] = track.pop();
+        let [emptyJ, emptyI] = getEmpty();
+        yield swapAnimate(x, y, emptyJ, emptyI, true);
+        backTrack();
+    });
 }
 function randomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -163,27 +177,29 @@ function swap(x, y, emptyX, emptyY, noRender = false, backTrack = false) {
     drawPart(y, x);
     drawPart(emptyY, emptyX);
 }
-async function swapAnimate(j2, i2, emptyJ, emptyI, backTrack = false) {
-    let dir = [emptyI - i2, emptyJ - j2];
-    let animateI = i2 * cellWidth;
-    let animateJ = j2 * cellWidth;
-    let speed = 20;
-    dir[0] *= speed;
-    dir[1] *= speed;
-    let target = [emptyI * cellWidth, emptyJ * cellWidth];
-    animating = true;
-    while (!(Math.abs(animateI - target[0]) < speed &&
-        Math.abs(animateJ - target[1]) < speed)) {
+function swapAnimate(j2, i2, emptyJ, emptyI, backTrack = false) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let dir = [emptyI - i2, emptyJ - j2];
+        let animateI = i2 * cellWidth;
+        let animateJ = j2 * cellWidth;
+        let speed = 20;
+        dir[0] *= speed;
+        dir[1] *= speed;
+        let target = [emptyI * cellWidth, emptyJ * cellWidth];
+        animating = true;
+        while (!(Math.abs(animateI - target[0]) < speed &&
+            Math.abs(animateJ - target[1]) < speed)) {
+            drawBox(i2, j2);
+            drawBox(emptyI, emptyJ);
+            animateI += dir[0];
+            animateJ += dir[1];
+            drawPartAt(i2, j2, animateJ, animateI);
+            yield sleep(2);
+        }
+        animating = false;
         drawBox(i2, j2);
-        drawBox(emptyI, emptyJ);
-        animateI += dir[0];
-        animateJ += dir[1];
-        drawPartAt(i2, j2, animateJ, animateI);
-        await sleep(2);
-    }
-    animating = false;
-    drawBox(i2, j2);
-    swap(j2, i2, emptyJ, emptyI, false, backTrack);
+        swap(j2, i2, emptyJ, emptyI, false, backTrack);
+    });
 }
 function isClose(a, b) {
     return Math.abs(a - b) < 30;

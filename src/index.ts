@@ -153,7 +153,7 @@ async function randomMove(recursive: number) {
 
 async function backTrack() {
 	if (track.length == 0) return;
-	let [x, y] = track.pop();
+	let [x, y] = track.pop()!;
 	let [emptyJ, emptyI] = getEmpty();
 	await swapAnimate(x, y, emptyJ, emptyI, true);
 	backTrack();
