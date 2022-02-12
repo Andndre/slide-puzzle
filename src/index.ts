@@ -111,7 +111,20 @@ function drawPartAt(i: number, j: number, x: number, y: number) {
 		cellWidth,
 		cellWidth
 	);
-	ctx.fillText((val + 1).toString(), x + cellWidth / 2, y + cellWidth / 2);
+
+	ctx.fillStyle = "#FFFFFF";
+	ctx.fillRect(
+		x + cellWidth / 2 - cellWidth / 8,
+		y + cellWidth / 2 - cellWidth / 8,
+		(cellWidth / 4) * (val + 1).toString().length,
+		cellWidth / 4
+	);
+	ctx.fillStyle = "#000000";
+	ctx.fillText(
+		(val + 1).toString(),
+		x + cellWidth / 2 - cellWidth / 16,
+		y + cellWidth / 2 + cellWidth / 16
+	);
 }
 
 async function randomMove(recursive: number) {

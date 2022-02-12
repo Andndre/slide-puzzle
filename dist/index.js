@@ -93,7 +93,10 @@ function drawPartAt(i, j, x, y) {
     sx *= singleSize;
     sy *= singleSize;
     ctx.drawImage(img, sx, sy, singleSize, singleSize, x, y, cellWidth, cellWidth);
-    ctx.fillText((val + 1).toString(), x + cellWidth / 2, y + cellWidth / 2);
+    ctx.fillStyle = "#FFFFFF";
+    ctx.fillRect(x + cellWidth / 2 - cellWidth / 8, y + cellWidth / 2 - cellWidth / 8, (cellWidth / 4) * (val + 1).toString().length, cellWidth / 4);
+    ctx.fillStyle = "#000000";
+    ctx.fillText((val + 1).toString(), x + cellWidth / 2 - cellWidth / 16, y + cellWidth / 2 + cellWidth / 16);
 }
 async function randomMove(recursive) {
     if (recursive <= 0) {
