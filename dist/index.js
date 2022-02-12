@@ -6,7 +6,8 @@ let puzzleSize = 4;
 let cells = [];
 let cellWidth;
 let animating = false;
-let lastDir = [0, 0];
+let lastDir = -1;
+let lastLastDir = -1;
 let track = [];
 let dirs = [
     [-1, 0],
@@ -103,13 +104,14 @@ async function randomMove(recursive) {
     let dir;
     let add;
     do {
-        dir = dirs[randomInt(0, dirs.length - 1)];
-        add = [empty[0] + dir[0], empty[1] + dir[1]];
-    } while (dir == lastDir ||
+        dir = randomInt(0, dirs.length - 1);
+        add = [empty[0] + dirs[dir][0], empty[1] + dirs[dir][1]];
+    } while (dir == lastLastDir ||
         add[0] < 0 ||
         add[0] >= puzzleSize ||
         add[1] < 0 ||
         add[1] >= puzzleSize);
+    lastLastDir = lastDir;
     lastDir = dir;
     await swapAnimate(add[0], add[1], empty[0], empty[1]);
     randomMove(--recursive);
